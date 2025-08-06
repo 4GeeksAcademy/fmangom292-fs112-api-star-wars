@@ -42,14 +42,12 @@ def sitemap():
     return generate_sitemap(app)
 
 
-@app.route('/user', methods=['GET'])
-def handle_hello():
-
-    response_body = {
-        "msg": "Hello, this is your GET /user response "
-    }
-
-    return jsonify(response_body), 200
+@app.route('/user/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.get(user_id)
+    if user is None:
+        return jsonify({"error": "User not found"}), 404
+    return jsonify(user.serialize()), 200
 
 # [GET] /people
 
